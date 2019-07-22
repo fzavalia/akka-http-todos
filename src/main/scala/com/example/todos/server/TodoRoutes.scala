@@ -4,7 +4,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives.{complete, path}
 import akka.http.scaladsl.server.{Route, StandardRoute}
-import com.example.todos.core.model.{InsertableTodo, Todo}
+import com.example.todos.core.model.InsertableTodo
 import com.example.todos.core.repository.{TodoNotFound, TodoRepository}
 
 class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
@@ -51,7 +51,6 @@ class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
       }
     }
   }
-
 
   private def deleteTodoHandler(id: Long): StandardRoute =
     todoRepository.delete(id) match {
