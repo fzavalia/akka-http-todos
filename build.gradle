@@ -1,6 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+
 plugins {
     id 'scala'
-    id "com.github.maiflai.scalatest" version "0.22"
+    id "com.github.maiflai.scalatest" version '0.22'
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
+    id 'application'
 }
 
 group 'com.example.todos'
@@ -10,6 +14,15 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+mainClassName = 'com.example.todos.server.Server'
+
+// Fixes: No configuration setting found for key 'akka.version'
+shadowJar {
+    transform(AppendingTransformer) {
+        resource = 'reference.conf'
+    }
 }
 
 dependencies {
