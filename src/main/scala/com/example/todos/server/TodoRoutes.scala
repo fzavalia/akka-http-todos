@@ -14,24 +14,20 @@ class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
       entity(as[Todo]) { todo =>
         storeTodoHandler(todo)
       }
-    } ~
-      get {
-        listTodosHandler
-      }
-  } ~
-    path("todos" / LongNumber) { id =>
-      get {
-        findTodoHandler(id)
-      } ~
-        put {
-          entity(as[Todo]) { todo =>
-            updateTodoHandler(todo)
-          }
-        } ~
-        delete {
-          deleteTodoHandler(id)
-        }
+    } ~ get {
+      listTodosHandler
     }
+  } ~ path("todos" / LongNumber) { id =>
+    get {
+      findTodoHandler(id)
+    } ~ put {
+      entity(as[Todo]) { todo =>
+        updateTodoHandler(todo)
+      }
+    } ~ delete {
+      deleteTodoHandler(id)
+    }
+  }
 
   private def listTodosHandler: StandardRoute =
     complete(todoRepository.list)
