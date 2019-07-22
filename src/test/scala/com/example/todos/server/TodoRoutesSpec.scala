@@ -14,7 +14,7 @@ class TodoRoutesSpec extends WordSpec with Matchers with ScalatestRouteTest with
   "TodoRoutes" should {
 
     "have an endpoint to store Todos" in {
-      Post("/todos", makeTodo) ~> routes ~> check {
+      Post("/todos", makeInsertableTodo) ~> routes ~> check {
         response.status shouldBe StatusCodes.Accepted
       }
     }
@@ -49,17 +49,17 @@ class TodoRoutesSpec extends WordSpec with Matchers with ScalatestRouteTest with
 
     "have an endpoint to update Todos" in {
 
-      Put("/todos/1", makeTodo) ~> routes ~> check {
+      Put("/todos/1", makeInsertableTodo) ~> routes ~> check {
         response.status shouldBe StatusCodes.Accepted
       }
 
-      Put("/todos/2", makeTodo) ~> routes ~> check {
+      Put("/todos/2", makeInsertableTodo) ~> routes ~> check {
         response.status shouldBe StatusCodes.NotFound
       }
     }
   }
 
-  private def makeTodo = Todo(1, completed = false, "description", LocalDate.now)
+  private def makeInsertableTodo = InsertableTodo(completed = false, "description", LocalDate.now)
 }
 
 object MockTodoRepository extends TodoRepository {
