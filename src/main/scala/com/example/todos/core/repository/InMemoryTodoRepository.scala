@@ -8,13 +8,13 @@ class InMemoryTodoRepository extends TodoRepository {
 
   private var todos: ListBuffer[Todo] = ListBuffer.empty
 
-  private var count: Long = 1
+  private var incrementalId: Long = 1
 
   override def find(id: Long): Option[Todo] = todos.find(x => x.id == id)
 
   override def store(todo: Todo): Unit = {
-    todos += Todo(count, todo.completed, todo.description, todo.date)
-    count += 1
+    todos += Todo(incrementalId, todo.completed, todo.description, todo.date)
+    incrementalId += 1
   }
 
   override def list: List[Todo] = todos.toList
