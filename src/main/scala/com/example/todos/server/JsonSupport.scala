@@ -1,7 +1,7 @@
 package com.example.todos.server
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import com.example.todos.core.model.Todo
+import com.example.todos.core.model.{InsertableTodo, Todo}
 import java.time._
 import java.time.format.DateTimeFormatter
 
@@ -15,6 +15,8 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   implicit val localDateFormat: LocalDateFormat.type = LocalDateFormat
 
   implicit val todoFormat: RootJsonFormat[Todo] = jsonFormat4(Todo)
+
+  implicit val insertableTodoFormat: RootJsonFormat[InsertableTodo] = jsonFormat3(InsertableTodo)
 }
 
 object LocalDateFormat extends JsonFormat[LocalDate] {

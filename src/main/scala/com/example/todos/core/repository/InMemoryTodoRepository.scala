@@ -1,6 +1,6 @@
 package com.example.todos.core.repository
 
-import com.example.todos.core.model.Todo
+import com.example.todos.core.model.{InsertableTodo, Todo}
 
 import scala.collection.mutable.ListBuffer
 
@@ -12,16 +12,18 @@ class InMemoryTodoRepository extends TodoRepository {
 
   override def find(id: Long): Option[Todo] = todos.find(x => x.id == id)
 
-  override def store(todo: Todo): Unit = {
+  override def store(todo: InsertableTodo): Unit = {
     todos += Todo(incrementalId, todo.completed, todo.description, todo.date)
     incrementalId += 1
   }
 
   override def list: List[Todo] = todos.toList
 
-  override def update(todo: Todo): Either[Throwable, Unit] =
-    todoIndexWhere(x => x.id == todo.id) match {
-      case Some(i) => Right(todos.update(i, todo))
+  override def update(id: Long, todo: InsertableTodo): Either[Throwable, Unit] =
+    todoIndexWhere(x => x.id == id) match {
+      case Some(i) =>
+        val updatedTodo = Todo(todos(i).id, todo.completed, todo.description, todo.date)
+        Right(todos.update(i, updatedTodo))
       case None => Left(new TodoNotFound)
     }
 

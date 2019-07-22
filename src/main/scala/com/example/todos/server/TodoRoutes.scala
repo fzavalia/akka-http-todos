@@ -4,14 +4,14 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives.{complete, path}
 import akka.http.scaladsl.server.{Route, StandardRoute}
-import com.example.todos.core.model.Todo
+import com.example.todos.core.model.{InsertableTodo, Todo}
 import com.example.todos.core.repository.{TodoNotFound, TodoRepository}
 
 class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
 
   def make: Route = path("todos") {
     post {
-      entity(as[Todo]) { todo =>
+      entity(as[InsertableTodo]) { todo =>
         storeTodoHandler(todo)
       }
     } ~ get {
@@ -21,8 +21,8 @@ class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
     get {
       findTodoHandler(id)
     } ~ put {
-      entity(as[Todo]) { todo =>
-        updateTodoHandler(todo)
+      entity(as[InsertableTodo]) { todo =>
+        updateTodoHandler(id, todo)
       }
     } ~ delete {
       deleteTodoHandler(id)
@@ -32,7 +32,7 @@ class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
   private def listTodosHandler: StandardRoute =
     complete(todoRepository.list)
 
-  private def storeTodoHandler(todo: Todo): StandardRoute = {
+  private def storeTodoHandler(todo: InsertableTodo): StandardRoute = {
     todoRepository.store(todo)
     complete(HttpResponse(StatusCodes.Accepted, entity = "Accepted"))
   }
@@ -43,13 +43,16 @@ class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
       case None => complete(HttpResponse(StatusCodes.NotFound, entity = "Not Found"))
     }
 
-  private def updateTodoHandler(todo: Todo): StandardRoute =
-    todoRepository.update(todo) match {
+  private def updateTodoHandler(id: Long, todo: InsertableTodo): StandardRoute = {
+    val newTodo = Todo(id, todo.completed, todo.description, todo.date)
+    todoRepository.update(id, todo) match {
       case Right(_) => complete(HttpResponse(StatusCodes.Accepted))
       case Left(e) => e match {
         case _: TodoNotFound => complete(HttpResponse(StatusCodes.NotFound))
       }
     }
+  }
+
 
   private def deleteTodoHandler(id: Long): StandardRoute =
     todoRepository.delete(id) match {

@@ -2,7 +2,7 @@ package com.example.todos.core.repository
 
 import java.time.LocalDate
 
-import com.example.todos.core.model.Todo
+import com.example.todos.core.model.{InsertableTodo, Todo}
 import org.scalatest.{Matchers, WordSpec}
 
 class InMemoryTodoRepositorySpec extends WordSpec with Matchers {
@@ -31,16 +31,16 @@ class InMemoryTodoRepositorySpec extends WordSpec with Matchers {
     "update a stored todo" in {
       val (repo, _) = makeAnInMemoryTodoRepositoryWithAStoredTodo
       val updatedDate = LocalDate.now
-      val updatedTodo = Todo(1, completed = false, "updated description", updatedDate)
-      val updateResult = repo.update(updatedTodo)
+      val updatedTodo = InsertableTodo(completed = false, "updated description", updatedDate)
+      val updateResult = repo.update(1, updatedTodo)
       updateResult.isRight shouldBe true
       repo.find(1).get shouldBe Todo(1, updatedTodo.completed, updatedTodo.description, updatedTodo.date)
     }
   }
 
-  private def makeAnInMemoryTodoRepositoryWithAStoredTodo: (InMemoryTodoRepository, Todo) = {
+  private def makeAnInMemoryTodoRepositoryWithAStoredTodo: (InMemoryTodoRepository, InsertableTodo) = {
     val repo = new InMemoryTodoRepository
-    val todo = Todo(-1, completed = true, "description", testDate)
+    val todo = InsertableTodo(completed = true, "description", testDate)
     repo.store(todo)
     (repo, todo)
   }
