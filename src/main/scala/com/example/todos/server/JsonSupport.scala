@@ -11,11 +11,8 @@ import spray.json._
 import scala.util.Try
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-
   implicit val localDateFormat: LocalDateFormat.type = LocalDateFormat
-
   implicit val todoFormat: RootJsonFormat[Todo] = jsonFormat4(Todo)
-
   implicit val insertableTodoFormat: RootJsonFormat[InsertableTodo] = jsonFormat3(InsertableTodo)
 }
 

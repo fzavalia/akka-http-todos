@@ -31,6 +31,7 @@ class TodoRoutesSpec extends WordSpec with Matchers with ScalatestRouteTest with
         responseAs[Todo] shouldBe MockTodoRepository.testTodo
       }
 
+      // Invalid Id
       Get("/todos/2") ~> routes ~> check {
         response.status shouldBe StatusCodes.NotFound
       }
@@ -42,6 +43,7 @@ class TodoRoutesSpec extends WordSpec with Matchers with ScalatestRouteTest with
         response.status shouldBe StatusCodes.Accepted
       }
 
+      // Invalid Id
       Delete("/todos/2") ~> routes ~> check {
         response.status shouldBe StatusCodes.NotFound
       }
@@ -53,6 +55,7 @@ class TodoRoutesSpec extends WordSpec with Matchers with ScalatestRouteTest with
         response.status shouldBe StatusCodes.Accepted
       }
 
+      // Invalid Id
       Put("/todos/2", makeInsertableTodo) ~> routes ~> check {
         response.status shouldBe StatusCodes.NotFound
       }
