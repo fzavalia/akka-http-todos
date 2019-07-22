@@ -75,7 +75,7 @@ object MockTodoRepository extends TodoRepository {
 
   override def store(todo: InsertableTodo): Unit = ()
 
-  override def update(id: Long, todo: InsertableTodo): Either[Throwable, Unit] = if (id == 1) Right() else Left(new TodoNotFound)
+  override def update(id: Long, todo: InsertableTodo): Either[Throwable, Unit] = if (id == 1) Right(()) else Left(new TodoNotFound)
 
-  override def delete(id: Long): Either[Throwable, Unit] = if (id == 1) Right() else Left(new TodoNotFound)
+  override def delete(id: Long): Either[Throwable, Unit] = if (id == 1) Right(()) else Left(new TodoNotFound)
 }
