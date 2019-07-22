@@ -44,7 +44,6 @@ class TodoRoutes(todoRepository: TodoRepository) extends JsonSupport {
     }
 
   private def updateTodoHandler(id: Long, todo: InsertableTodo): StandardRoute = {
-    val newTodo = Todo(id, todo.completed, todo.description, todo.date)
     todoRepository.update(id, todo) match {
       case Right(_) => complete(HttpResponse(StatusCodes.Accepted))
       case Left(e) => e match {
