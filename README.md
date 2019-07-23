@@ -28,8 +28,6 @@ Make a routing hierarchy for BREADing `Todos` with `akka-http`
 
 Implement at least 2 actors from `akka` which should communicate with each other.
 
-`Todos` should be stored in a MySQL database.
-
 Add a `Dockerfile` to the project and run the server through it.
 
 Passable test coverage.
